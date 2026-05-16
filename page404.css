@@ -1,0 +1,381 @@
+@import url('https://googleapis.com');
+
+/* 1. СБРОС СТИЛЕЙ И ОСНОВА БРАУЗЕРА */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+html {
+    background-color: #1D0C32;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #1D0C32;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: #E5D2FE;
+    overflow-x: hidden;
+    position: relative;
+    
+    /* АНИМАЦИЯ ПЛАВНОГО ВХОДА СТРАНИЦЫ */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+body.page-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 2. ШАПКА С АНИМИРОВАННЫМ ЛОГОТИПОМ */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    padding-inline: 300px; 
+    color: #E5D2FE;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(38, 6, 67, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(229, 210, 254, 0.1);
+}
+
+.head-logo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.head-logo h1 {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.headx-logo {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.headx-logo::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        #00ffcc, 
+        #9810fa, 
+        #B701E6, 
+        #00ffcc
+    );
+    animation: rotateGlow 3s linear infinite;
+}
+
+.headx-logo::after {
+    content: "";
+    position: absolute;
+    inset: 3px; 
+    background: #1D0C32;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.headx-logo img {
+    width: 35px;
+    height: 35px;
+    position: relative;
+    z-index: 2;
+}
+/* 3. ДВУХКОЛОНОЧНЫЙ МАКЕТ СТРАНИЦЫ 404 */
+.error-wrapper {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 80px;
+    position: relative;
+}
+
+/* ЛЕВАЯ СТОРОНА: ТЕКСТ */
+.error-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 5;
+}
+
+.error-code {
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ffffff;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.error-text {
+    font-size: 16px;
+    color: rgba(229, 210, 254, 0.7);
+    margin-bottom: 40px;
+    max-width: 450px;
+    line-height: 1.6;
+}
+
+/* Фирменная градиентная кнопка-капсула */
+.btn-home {
+    display: inline-block;
+    padding: 16px 45px;
+    background: linear-gradient(135deg, #9810fa, #B701E6);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    border-radius: 18px; 
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+    box-shadow: 0 8px 20px rgba(183, 1, 230, 0.3);
+    cursor: pointer;
+}
+
+.btn-home:hover {
+    transform: scale(1.03) translateY(-1px); 
+    box-shadow: 0 12px 28px rgba(183, 1, 230, 0.55), 0 0 15px rgba(152, 16, 250, 0.3);
+}
+
+.btn-home:active {
+    transform: scale(0.98) translateY(0);
+}
+
+/* ПРАВАЯ СТОРОНА: КОСМОНАВТ И ТУМАННОСТЬ */
+.error-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.astronaut-img {
+    max-width: 80%;
+    height: auto;
+    z-index: 2;
+    animation: floatAstronaut 6s ease-in-out infinite;
+}
+
+/* РОДИТЕЛЬСКИЙ ФОН СВЕЧЕНИЯ */
+.glow-sphere {
+    position: absolute;
+    width: 850px; 
+    height: 850px;
+    z-index: 1;
+    overflow: visible;
+    filter: blur(70px) url(#galaxy-noise); 
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
+
+/* ЭЛЕМЕНТ ПУЛЬСАЦИИ И ДВИЖЕНИЯ ТУМАННОСТИ */
+.glow-sphere::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(229, 210, 254, 0.4) 0%, rgba(152, 16, 250, 0) 60%),
+        radial-gradient(circle at 45% 75%, rgba(0, 168, 255, 0.6) 0%, rgba(0, 102, 204, 0.2) 50%, rgba(0,0,0,0) 75%),
+        radial-gradient(circle at 55% 30%, rgba(152, 16, 250, 0.5) 0%, rgba(183, 1, 230, 0.15) 50%, rgba(0,0,0,0) 75%);
+    animation: realGalaxyMotion 5s ease-in-out infinite alternate;
+}
+
+/* 4. СТИЛИЗАЦИЯ И НОВОЕ ПОЗИЦИОНИРОВАНИЕ УВЕЛИЧЕННЫХ КАМНЕЙ */
+.space-rock {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.65;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+}
+
+/* Камень 1 (Над головой слева) — Крупный */
+.rock-one {
+    width: 55px;
+    top: 12%;
+    left: 28%;
+    animation: rockMotionOne 12s ease-in-out infinite alternate;
+}
+
+/* Камень 2 (Справа под ногами) — Самый большой */
+.rock-two {
+    width: 85px;
+    bottom: 24%;
+    left: 62%;
+    animation: rockMotionTwo 10s ease-in-out infinite alternate;
+}
+
+/* Камень 3 (В самом низу по центру) — Средний */
+.rock-three {
+    width: 50px;
+    bottom: 4%;
+    left: 42%;
+    animation: rockMotionThree 14s ease-in-out infinite alternate;
+}
+
+/* Камень 4 (Справа вверху над книгой) — Средний */
+.rock-four {
+    width: 60px;
+    top: 22%;
+    right: 15%;
+    animation: rockMotionThree 11s ease-in-out infinite alternate-reverse;
+}
+
+/* Камень 5 (Слева на уровне пояса) — Крупный */
+.rock-five {
+    width: 70px;
+    top: 50%;
+    left: 10%;
+    animation: rockMotionOne 15s ease-in-out infinite alternate-reverse;
+}
+
+/* Камень 6 (Глубоко внизу справа) — Небольшой */
+.rock-six {
+    width: 45px;
+    bottom: 12%;
+    right: 22%;
+    animation: rockMotionTwo 13s ease-in-out infinite alternate-reverse;
+}
+
+/* 5. ВСЕ АНИМАЦИИ ПРОЕКТА */
+@keyframes rotateGlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes floatAstronaut {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes realGalaxyMotion {
+    0% { transform: scale(0.75) translate(-40px, -30px); opacity: 0.3; }
+    50% { transform: scale(1.02) translate(15px, 20px); opacity: 1; }
+    100% { transform: scale(1.25) translate(35px, -35px); opacity: 0.2; }
+}
+
+@keyframes rockMotionOne {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-15px, 20px) rotate(25deg); }
+}
+
+@keyframes rockMotionTwo {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(20px, -15px) rotate(-35deg); }
+}
+
+@keyframes rockMotionThree {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-8px, -20px) rotate(15deg); }
+}
+
+/* 6. АДАПТИВНОСТЬ */
+@media (max-width: 992px) {
+    header { padding-inline: 40px; height: 80px; }
+    .error-wrapper { grid-template-columns: 1fr; text-align: center; gap: 40px; padding: 40px 20px; }
+    .error-info { align-items: center; order: 2; }
+    .error-visual { order: 1; }
+    .error-code { font-size: 70px; }
+    .error-title { font-size: 28px; }
+    .glow-sphere { width: 350px; height: 350px; }
+    .space-rock { display: none; } /* Скрываем на телефонах для оптимизации */
+}
+/* ==========================================================================
+   КОСМИЧЕСКАЯ ПЫЛЬ И ЛЕТАЮЩИЕ ПЕСЧИНКИ (CSS ONLY)
+   ========================================================================== */
+.space-dust {
+    position: absolute;
+    inset: -50px;
+    z-index: 2; /* Находится ЗА камнями, но ПЕРЕД неоновым шаром */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Генерация песчинок через множественные радиальные градиенты */
+.space-dust::before,
+.space-dust::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.45; /* Мягкая прозрачность пыли */
+    mix-blend-mode: screen;
+}
+
+/* Первый слой пыли: мелкие белые и фиолетовые песчинки */
+.space-dust::before {
+    background-image: 
+        radial-gradient(1.5px 1.5px at 20% 30%, rgba(255, 255, 255, 0.8) 100%, transparent),
+        radial-gradient(2px 2px at 40% 70%, rgba(229, 210, 254, 0.6) 100%, transparent),
+        radial-gradient(1px 1px at 75% 20%, rgba(255, 255, 255, 0.9) 100%, transparent),
+        radial-gradient(2.5px 2.5px at 85% 60%, rgba(152, 16, 250, 0.5) 100%, transparent),
+        radial-gradient(2px 2px at 30% 85%, rgba(255, 255, 255, 0.7) 100%, transparent),
+        radial-gradient(1.5px 1.5px at 60% 40%, rgba(0, 255, 204, 0.4) 100%, transparent); /* Бирюзовая пылинка под цвет лого */
+    animation: dustMotionOne 25s linear infinite alternate;
+}
+
+/* Второй слой пыли: чуть более крупные размытые частицы (эффект глубины) */
+.space-dust::after {
+    background-image: 
+        radial-gradient(3px 3px at 15% 75%, rgba(229, 210, 254, 0.4) 100%, transparent),
+        radial-gradient(4px 4px at 50% 25%, rgba(152, 16, 250, 0.3) 100%, transparent),
+        radial-gradient(3.5px 3.5px at 80% 80%, rgba(255, 255, 255, 0.5) 100%, transparent),
+        radial-gradient(3px 3px at 90% 35%, rgba(0, 255, 204, 0.3) 100%, transparent),
+        radial-gradient(4.5px 4.5px at 35% 15%, rgba(229, 210, 254, 0.2) 100%, transparent);
+    filter: blur(0.5px); /* Легкое размытие задней пыли */
+    animation: dustMotionTwo 35s linear infinite alternate;
+}
+
+/* МЕДЛЕННЫЕ КОСМИЧЕСКИЕ ТРАЕКТОРИИ ДЛЯ ПЫЛИ (Вращение + Сдвиг) */
+@keyframes dustMotionOne {
+    0% {
+        transform: rotate(0deg) translate(-10px, -15px) scale(0.9);
+    }
+    100% {
+        transform: rotate(15deg) translate(20px, 15px) scale(1.1);
+    }
+}
+
+@keyframes dustMotionTwo {
+    0% {
+        transform: rotate(0deg) translate(15px, 20px) scale(1.1);
+    }
+    100% {
+        transform: rotate(-10deg) translate(-20px, -15px) scale(0.95);
+    }
+}

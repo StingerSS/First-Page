@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root {
+    --primary: #6c33a5;
+    --primary-dark: #28114f;
+    --error: #ff4d4d;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #3f1b7c, #5a288b);
+    padding: 20px;
+    overflow: hidden;
+}
+
+#leaf-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.leaf {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 0 15px;
+    opacity: 0.6;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 80vh;
+    background: url('../assets/Low-poly-forest-purple.jpg') center/cover no-repeat;
+    border-radius: 35px;
+    box-shadow: 0 30px 80px -15px #02261d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.regCard {
+    width: 100%;
+    max-width: 400px;
+    padding: 50px 40px;
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.8s ease-out;
+    text-align: center;
+}
+
+.regCard.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+h1 { color: var(--white); margin-bottom: 30px; font-weight: 800; font-size: 36px; }
+
+.input-group { width: 100%; }
+
+.inp {
+    width: 100%;
+    height: 55px;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 35px;
+    padding: 0 55px 0 25px;
+    color: var(--white);
+    font-size: 16px;
+    transition: 0.3s;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 20px;
+    background-image: url("../assets/mail.png");
+}
+
+.inp.p {
+    background-image: url("../assets/locked-computer.png");
+}
+
+.inp::placeholder { color: rgba(255, 255, 255, 0.7); }
+.inp:focus { background-color: rgba(255, 255, 255, 0.3); border-color: var(--white); }
+
+.inp.error {
+    border-color: var(--error);
+    background-color: rgba(255, 77, 77, 0.1);
+    animation: shake 0.3s ease-in-out;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 5px 0 20px 0;
+    padding-left: 10px;
+}
+
+.custom-checkbox { display: flex; align-items: center; cursor: pointer; color: var(--white); font-size: 14px; font-weight: 600; }
+.custom-checkbox input { display: none; }
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    margin-right: 12px;
+    position: relative;
+    transition: 0.3s;
+}
+
+.custom-checkbox input:checked + .checkmark { background: var(--primary); border-color: var(--primary); }
+.checkmark:after {
+    content: "✓"; position: absolute; color: white; font-size: 12px; left: 3px; top: -2px; display: none;
+}
+.custom-checkbox input:checked + .checkmark:after { display: block; }
+
+.login-btn {
+    width: 100%; height: 60px; border-radius: 35px; border: none;
+    font-size: 19px; font-weight: 800; color: var(--primary-dark);
+    background: var(--white); cursor: pointer; transition: 0.3s;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.login-btn:hover:not(:disabled) { transform: scale(1.02); }
+.login-btn:disabled { opacity: 0.7; }
+
+.spinner {
+    width: 24px; height: 24px; border: 3px solid rgba(10, 107, 83, 0.2);
+    border-top: 3px solid var(--primary-dark); border-radius: 50%;
+    display: none; animation: spin 0.8s linear infinite;
+}
+
+.loading .btn-text { display: none; }
+.loading .spinner { display: block; }
+
+#statusMsg { margin-top: 15px; font-size: 14px; font-weight: 600; min-height: 20px; transition: 0.3s; color: var(--white); }
+
+.report {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    width: 100%;
+}
+
+.report a { color: var(--white); text-decoration: none; font-weight: 800; }
+.report a:hover { text-decoration: underline; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@media (max-width: 1024px) {
+    .wrapper {
+        width: 95%;
+        min-height: 70vh;
+        border-radius: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .wrapper {
+        background-image: none;
+        background: transparent;
+        box-shadow: none;
+        min-height: auto;
+    }
+
+    .regCard {
+        width: 100%;
+        max-width: 360px;
+        padding: 40px 25px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    #leaf-container {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .regCard {
+        padding: 30px 20px;
+    }
+
+    .inp {
+        height: 50px;
+        font-size: 14px;
+    }
+
+    .login-btn {
+        height: 55px;
+        font-size: 17px;
+    }
+}
